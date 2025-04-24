@@ -280,3 +280,10 @@ footer {
     font-size: 14px;
     color: #aaa;
 }
+#greeting {
+    color: rgb(162, 232, 32);
+}
+nav ul li {
+    display: inline-block;
+    margin-right: 20px;
+}

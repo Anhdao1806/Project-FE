@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gym Management</title>
+    <title>Trang chủ</title>
     <link rel="stylesheet" href=".//assets/css/style.css">
 </head>
 <body>
@@ -14,7 +15,9 @@
             <ul>
                 <li><a href="#">Trang chủ</a></li>
                 <li><a href="#">Lịch tập</a></li>
-                <li><a href=".//pages/auth/login.html">Đăng nhập</a></li>
+                <li id="manage-link" style="display: none;"><a href="#">Quản lý</a></li>
+                <span id="greeting" style="margin-left: 20px;"></span>
+                <li><a href=".//pages/auth/login.html" id="auth-link">Đăng nhập</a></li>
             </ul>
         </nav>
     </header>
@@ -61,7 +64,7 @@
             </div>
             <div class="footer-column">
                 <h4>Liên hệ</h4>
-                <p>Email: contact@gym.com</p>
+                <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="37545a5b4154564177544a5e1d505c">[email protected]</a></p>
                 <p>Phone: (123) 456-7890</p>
                 <p>Địa chỉ: 123 Đường ABC, Quận XYZ</p>
             </div>
@@ -76,5 +79,42 @@
         </div>
         <p class="footer-copy">© 2024 GYM MANAGEMENT. All rights reserved.</p>
     </footer>
+    <script>
+        // Kiểm tra trạng thái đăng nhập khi trang tải
+        document.addEventListener('DOMContentLoaded', () => {
+            const authLink = document.getElementById('auth-link');
+            const manageLink = document.getElementById('manage-link');
+            const greeting = document.getElementById('greeting');
+            const loggedInUser = localStorage.getItem('loggedInUser');
+
+            if (loggedInUser) {
+                const user = JSON.parse(loggedInUser);
+                const username = user.email.split('@')[0]; // Lấy phần trước @ làm tên đăng nhập
+
+                // Hiển thị "Xin chào, [tên đăng nhập]" cho cả admin và user
+                greeting.textContent = `Xin chào, ${username}`;
+
+                // Đổi liên kết thành "Đăng xuất"
+                authLink.textContent = 'Đăng xuất';
+                authLink.href = '#';
+                authLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    logout(); // Gọi hàm logout từ main.js
+                });
+
+                // Nếu là admin, hiển thị mục "Quản lý"
+                if (user.role === 'admin') {
+                    manageLink.style.display = 'inline-block';
+                }
+            } else {
+                // Nếu chưa đăng nhập, giữ nguyên liên kết "Đăng nhập"
+                authLink.textContent = 'Đăng nhập';
+                authLink.href = './/pages/auth/login.html';
+                greeting.textContent = ''; // Không hiển thị "Xin chào"
+                manageLink.style.display = 'none'; // Ẩn mục "Quản lý"
+            }
+        });
+    </script>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>
